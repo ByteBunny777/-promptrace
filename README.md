@@ -1,4 +1,9 @@
-# Promptrace
+# promptrace
+
+[![PyPI](https://img.shields.io/badge/pypi-promptrace-3775A9?logo=python&logoColor=white)](https://pypi.org/project/promptrace/)
+[![Python](https://img.shields.io/badge/python-3.8%2B-3776AB?logo=python&logoColor=white)](https://www.python.org)
+[![Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen)](#design-notes)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](#license)
 
 Lightweight, **dependency-free** logging and analytics for LLM API calls.
 
