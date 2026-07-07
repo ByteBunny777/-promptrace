@@ -1,4 +1,4 @@
-# promptrace
+# Promptrace
 
 Lightweight, **dependency-free** logging and analytics for LLM API calls.
 
