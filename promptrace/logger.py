@@ -18,21 +18,23 @@ class _CallHandle:
     know them, without having to pass everything up front.
     """
 
-    def __init__(self, entry: LogEntry, start_time: float):
+    def __init__(self, entry: LogEntry, start_time: float, keep_text: bool = True):
         self._entry = entry
         self._start_time = start_time
+        self._keep_text = keep_text
 
     def set_response(
         self,
         response_text: Optional[str] = None,
         prompt_tokens: int = 0,
         completion_tokens: int = 0,
-        store_text: bool = True,
+        store_text: Optional[bool] = None,
     ) -> None:
         self._entry.prompt_tokens = prompt_tokens
         self._entry.completion_tokens = completion_tokens
         if response_text is not None:
-            if store_text:
+            keep = self._keep_text if store_text is None else store_text
+            if keep:
                 self._entry.response_text = response_text
             h, ln = LogEntry.redact(response_text)
             self._entry.response_hash, self._entry.response_len = h, ln
@@ -123,7 +125,7 @@ class LLMLogger:
             prompt_hash=p_hash,
             prompt_len=p_len,
         )
-        handle = _CallHandle(entry, time.perf_counter())
+        handle = _CallHandle(entry, time.perf_counter(), keep_text=keep_text)
         try:
             yield handle
         finally:
@@ -131,8 +133,6 @@ class LLMLogger:
             entry.cost_usd = estimate_cost(
                 model, entry.prompt_tokens, entry.completion_tokens, self.pricing
             )
-            if not keep_text:
-                entry.response_text = None
             self._append(entry)
 
     def _append(self, entry: LogEntry) -> None:
